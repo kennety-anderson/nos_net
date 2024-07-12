@@ -24,7 +24,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="nostv" android:host="oauth2redirect" android:pathPrefix="/authorize" />
+                <data android:scheme="itself" android:host="oauth2redirect" android:pathPrefix="/authorize" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

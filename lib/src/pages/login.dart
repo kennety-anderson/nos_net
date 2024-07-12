@@ -1,7 +1,7 @@
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:nos_net/src/providers/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:nos_net/src/providers/auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,23 +16,39 @@ class LoginPageState extends State<LoginPage> {
   final String callbackUrl = dotenv.env['AUTH_CALLBACK_URL'] ?? '';
   final String clientId = dotenv.env['AUTH_CLIENT_ID'] ?? '';
 
-  Future<void> _loginWithWebAuth(BuildContext context) async {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkForAuthorizationCode();
+    });
+  }
+
+  void _checkForAuthorizationCode() {
+    final uri = Uri.base;
+
+    if (uri.queryParameters.containsKey('code')) {
+      final code = uri.queryParameters['code'];      
+      _loginWithAuthorizationCode(code!);
+    }
+  }
+
+  void _loginWithAuthorizationCode(String code) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final result = await FlutterWebAuth.authenticate(
-        url:
-            '$loginUrl/authorize?client_id=$clientId&scope=openid&response_type=code&redirect_uri=$callbackUrl',
-        callbackUrlScheme: 'nostv',
-      );
-
-      print('parsed uri ==== $result');
-      // if (token != null) {
-      //   await authProvider.login(token);
-      // }
+      await authProvider.loginWithCode(code);
+      print('Login successful');
     } catch (e) {
-      print('Error during authentication: $e');
+      print('Error during login with code: $e');
     }
+  }
+
+  void _loginWithWebAuth(BuildContext context) {
+    print('$loginUrl/authorize?client_id=$clientId&scope=openid+profile+customer_info+offline_access&response_type=code&redirect_uri=$callbackUrl&state=foo');
+    final url = '$loginUrl/authorize?client_id=$clientId&scope=openid+profile+customer_info+offline_access&response_type=code&redirect_uri=$callbackUrl&state=foo&auto_login=&login&code_challenge=&code_challenge_method=&sign_up=false';
+    
+    html.window.location.href = url;
   }
 
   @override

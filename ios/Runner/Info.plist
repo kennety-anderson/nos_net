@@ -52,7 +52,7 @@
     	<string>com.yourapp</string>
     	<key>CFBundleURLSchemes</key>
     	<array>
-      	<string>nostv</string>
+      	<string>itself</string>
     	</array>
   	</dict>
 	</array>
