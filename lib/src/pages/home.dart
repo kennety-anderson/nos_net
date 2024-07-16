@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nos_net/src/widgets/router_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,8 +10,8 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: const Center(
-        child: Text('Home Page'),
+      body: Center(
+        child: RouterList(),
       ),
     );
   }

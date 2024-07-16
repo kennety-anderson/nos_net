@@ -12,9 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final String loginUrl = dotenv.env['AUTH_BASE_URL'] ?? '';
-  final String callbackUrl = dotenv.env['AUTH_CALLBACK_URL'] ?? '';
-  final String clientId = dotenv.env['AUTH_CLIENT_ID'] ?? '';
+  final String loginUrl = dotenv.env['AUTH_BASE_URL']!;
+  final String callbackUrl = dotenv.env['AUTH_CALLBACK_URL']!;
+  final String clientId = dotenv.env['AUTH_CLIENT_ID']!;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class LoginPageState extends State<LoginPage> {
     final uri = Uri.base;
 
     if (uri.queryParameters.containsKey('code')) {
-      final code = uri.queryParameters['code'];      
+      final code = uri.queryParameters['code'];
       _loginWithAuthorizationCode(code!);
     }
   }
@@ -38,16 +38,15 @@ class LoginPageState extends State<LoginPage> {
 
     try {
       await authProvider.loginWithCode(code);
-      print('Login successful');
     } catch (e) {
       print('Error during login with code: $e');
     }
   }
 
   void _loginWithWebAuth(BuildContext context) {
-    print('$loginUrl/authorize?client_id=$clientId&scope=openid+profile+customer_info+offline_access&response_type=code&redirect_uri=$callbackUrl&state=foo');
-    final url = '$loginUrl/authorize?client_id=$clientId&scope=openid+profile+customer_info+offline_access&response_type=code&redirect_uri=$callbackUrl&state=foo&auto_login=&login&code_challenge=&code_challenge_method=&sign_up=false';
-    
+    final url =
+        '$loginUrl/authorize?client_id=$clientId&scope=openid+profile+customer_info+offline_access&response_type=code&redirect_uri=$callbackUrl&state=foo&auto_login=&login&code_challenge=&code_challenge_method=&sign_up=false';
+
     html.window.location.href = url;
   }
 
@@ -55,7 +54,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: const Text('Login Page'),
       ),
       body: Center(
         child: Padding(
